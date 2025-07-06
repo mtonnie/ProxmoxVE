@@ -27,6 +27,11 @@ RELEASE=$(curl -fsSL https://api.github.com/repos/androidseb25/iGotify-Notificat
 curl -fsSL "https://github.com/androidseb25/iGotify-Notification-Assistent/releases/download/v${RELEASE}/iGotify-Notification-Service-amd64-v${RELEASE}.zip" -o "iGotify-Notification-Service.zip"
 $STD unzip -o iGotify-Notification-Service.zip -d $temp_dir
 mv $temp_dir/iGotify-Notification-Service-amd64 /opt/igotify
+cat <<EOF >/opt/igotify/env.conf
+GOTIFY_URLS=http://gotify
+GOTIFY_CLIENT_TOKENS=cXXXXXXXX1
+SECNTFY_TOKENS=NTFY-DEVICE-XXXXXX1
+EOF
 echo "${RELEASE}" > /opt/iGotify_version.txt
 msg_ok "Installed iGotify"
 
@@ -37,6 +42,7 @@ Description=iGotify Service
 
 [Service]
 WorkingDirectory=/opt/igotify
+EnvironmentFile=/opt/igotify/env.conf
 ExecStart=/usr/bin/dotnet 'iGotify Notification Assist.dll'
 SyslogIdentifier=igotify
 User=root
