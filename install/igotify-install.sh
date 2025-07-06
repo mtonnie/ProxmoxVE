@@ -46,7 +46,7 @@ Description=iGotify Service
 WorkingDirectory=/opt/igotify
 Environment="ASPNETCORE_URLS=http://0.0.0.0:5000"
 ExecStart=/usr/bin/dotnet 'iGotify Notification Assist.dll'
-ExecStop=/bin/kill ${MAINPID}
+ExecStop=/bin/kill "${MAINPID}"
 KillSignal=SIGTERM
 SyslogIdentifier=igotify
 User=root
