@@ -5,7 +5,7 @@ source <(curl -fsSL https://raw.githubusercontent.com/mtonnie/ProxmoxVE/main/mis
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://github.com/androidseb25/iGotify-Notification-Assistent
 
-APP="igotify"
+APP="iGotify"
 var_tags="${var_tags:-notification}"
 var_cpu="${var_cpu:-1}"
 var_ram="${var_ram:-1024}"
