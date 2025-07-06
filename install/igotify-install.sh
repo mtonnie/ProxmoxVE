@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-# Copyright (c) 2021-2025 tteck
-# Author: mtonnie (tteckster)
+# Copyright (c) 2021-2025 community-scripts ORG
+# Author: Martin Tonnier (mtonnie)
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
-# Source: https://github.com/androidseb25/iGotify-Notification-Assistent/
+# Source: https://github.com/androidseb25/iGotify-Notification-Assistent
 
 source /dev/stdin <<<"$FUNCTIONS_FILE_PATH"
 color
@@ -16,15 +16,14 @@ update_os
 msg_info "Installing ASP.NET Core Runtime"
 curl -fsSL "https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb" -o packages-microsoft-prod.deb
 $STD dpkg -i packages-microsoft-prod.deb
-rm packages-microsoft-prod.deb
 $STD apt-get update
 $STD apt-get install -y aspnetcore-runtime-9.0
 msg_ok "Installed ASP.NET Core Runtime"
 
 msg_info "Installing iGotify"
-curl -fsSL "https://github.com/androidseb25/iGotify-Notification-Assistent/releases/download/v1.3.1.0/iGotify-Notification-Service-amd64-v1.3.1.0.zip" -o "iGotify-Notification-Service.zip"
+RELEASE=$(curl -fsSL https://api.github.com/repos/androidseb25/iGotify-Notification-Assistent/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
+curl -fsSL "https://github.com/androidseb25/iGotify-Notification-Assistent/releases/download/v${RELEASE}/iGotify-Notification-Service-amd64-v${RELEASE}.zip" -o "iGotify-Notification-Service.zip"
 $STD unzip -o iGotify-Notification-Service.zip -d /opt/igotify
-rm iGotify-Notification-Service.zip
 msg_ok "Installed iGotify"
 
 msg_info "Creating Service"
@@ -48,6 +47,8 @@ motd_ssh
 customize
 
 msg_info "Cleaning up"
+rm packages-microsoft-prod.deb
+rm iGotify-Notification-Service.zip
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
 msg_ok "Cleaned"
