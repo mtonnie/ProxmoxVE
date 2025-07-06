@@ -24,7 +24,7 @@ msg_info "Installing iGotify"
 RELEASE=$(curl -fsSL https://api.github.com/repos/androidseb25/iGotify-Notification-Assistent/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
 curl -fsSL "https://github.com/androidseb25/iGotify-Notification-Assistent/releases/download/v${RELEASE}/iGotify-Notification-Service-amd64-v${RELEASE}.zip" -o "iGotify-Notification-Service.zip"
 $STD unzip -o iGotify-Notification-Service.zip -d /opt/igotify
-echo "${RELEASE}" >/opt/${APP}_version.txt
+# echo "${RELEASE}" >/opt/${APP}_version.txt
 msg_ok "Installed iGotify"
 
 msg_info "Creating Service"
