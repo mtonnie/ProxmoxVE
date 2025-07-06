@@ -31,6 +31,8 @@ cat <<EOF >/opt/igotify/env.conf
 GOTIFY_URLS=http://gotify
 GOTIFY_CLIENT_TOKENS=cXXXXXXXX1
 SECNTFY_TOKENS=NTFY-DEVICE-XXXXXX1
+
+ASPNETCORE_URLS=http://0.0.0.0:5000
 EOF
 echo "${RELEASE}" > /opt/iGotify_version.txt
 msg_ok "Installed iGotify"
