@@ -27,30 +27,32 @@ function update_script() {
     msg_error "No ${APP} Installation Found!"
     exit
   fi
-  msg_info "Stopping ${APP}"
-  systemctl stop rdtc
-  msg_ok "Stopped ${APP}"
+  RELEASE=$(curl -fsSL https://api.github.com/repos/androidseb25/iGotify-Notification-Assistent/releases/latest | grep "tag_name" | awk '{print substr($2, 3, length($2)-4) }')
+  if [[ ! -f /opt/${APP}_version.txt ]] || [[ "${RELEASE}" != "$(cat /opt/${APP}_version.txt)" ]]; then
+    msg_info "Stopping ${APP}"
+    systemctl stop igotify
+    msg_ok "Stopped ${APP}"
 
-  msg_info "Updating ${APP}"
-  if dpkg-query -W dotnet-sdk-8.0 >/dev/null 2>&1; then
-    $STD apt-get remove --purge -y dotnet-sdk-8.0
-    $STD apt-get install -y dotnet-sdk-9.0
+    msg_info "Updating ${APP} to v${RELEASE}"
+    mkdir -p igotify-backup
+    cp -R /opt/igotify/appsettings.json igotify-backup/
+    curl -fsSL "https://github.com/androidseb25/iGotify-Notification-Assistent/releases/download/v${RELEASE}/iGotify-Notification-Service-amd64-v${RELEASE}.zip" -o "iGotify-Notification-Service.zip"
+    $STD unzip -o iGotify-Notification-Service.zip -d /opt/igotify
+    cp -R igotify-backup/appsettings.json /opt/igotify/
+    echo "${RELEASE}" >/opt/${APP}_version.txt
+    msg_ok "Updated $APP to v${RELEASE}"
+
+    msg_info "Starting ${APP}"
+    systemctl start igotify
+    msg_ok "Started ${APP}"
+
+    msg_info "Cleaning Up"
+    rm -rf igotify-backup iGotify-Notification-Service.zip
+    msg_ok "Cleaned"
+    msg_ok "Updated Successfully"
+  else
+    msg_ok "No update required. ${APP} is already at ${RELEASE}"
   fi
-  mkdir -p igotify-backup
-  cp -R /opt/igotify/appsettings.json igotify-backup/
-  curl -fsSL "https://github.com/androidseb25/iGotify-Notification-Assistent/releases/download/v1.3.1.0/iGotify-Notification-Service-amd64-v1.3.1.0.zip" -o "iGotify-Notification-Service.zip"
-  $STD unzip -o iGotify-Notification-Service.zip -d /opt/igotify
-  cp -R igotify-backup/appsettings.json /opt/igotify/
-  msg_ok "Updated ${APP}"
-
-  msg_info "Starting ${APP}"
-  systemctl start igotify
-  msg_ok "Started ${APP}"
-
-  msg_info "Cleaning Up"
-  rm -rf igotify-backup iGotify-Notification-Service.zip
-  msg_ok "Cleaned"
-  msg_ok "Updated Successfully"
   exit
 }
 
