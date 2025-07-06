@@ -35,10 +35,10 @@ function update_script() {
 
     msg_info "Updating ${APP} to v${RELEASE}"
     mkdir -p igotify-backup
-    cp -R /opt/igotify/appsettings.json igotify-backup/
+    cp -R /opt/igotify/appsettings.json /opt/igotify/env.conf /opt/igotify/data igotify-backup/
     curl -fsSL "https://github.com/androidseb25/iGotify-Notification-Assistent/releases/download/v${RELEASE}/iGotify-Notification-Service-amd64-v${RELEASE}.zip" -o "iGotify-Notification-Service.zip"
     $STD unzip -o iGotify-Notification-Service.zip -d /opt/igotify
-    cp -R igotify-backup/appsettings.json /opt/igotify/
+    cp -R igotify-backup/appsettings.json igotify-backup/env.conf igotify-backup/data /opt/igotify/
     echo "${RELEASE}" >/opt/${APP}_version.txt
     msg_ok "Updated $APP to v${RELEASE}"
 
